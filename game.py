@@ -1,5 +1,6 @@
 import pygame
 import time
+import copy
 
 def transition(screen, duracion):
     fade_surface = pygame.Surface(screen.get_size())
@@ -25,12 +26,14 @@ def game_over():
         screen.blit(font.render("GAME OVER (R-restart/Q-quit)", True, (255,255,255)), (screen.get_width() // 2 - 200, screen.get_height() //2))
         pygame.display.flip()
 
-def restart_game():
-    global player_pos, hero_rect, actual_room
+def restart_game(initial_pieces):
+    #global player_pos, hero_rect, actual_room
     player_pos = pygame.Vector2(screen.get_width() /2, screen.get_height() /2)
-    hero_rect.topleft = (int(player_pos.x), int(player_pos.y))
+    #hero_rect.topleft = (int(player_pos.x), int(player_pos.y))
+    pieces = copy.deepcopy(initial_pieces)
+    items = 0
     actual_room = 1
-
+    return player_pos, actual_room, pieces, items
 
 class Alien:
     def __init__(self,x,y):
@@ -61,11 +64,6 @@ screen = pygame.display.set_mode((1280,720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
-items = 0
-player_pos = pygame.Vector2(screen.get_width() /2, screen.get_height() /2)
-hero_image = pygame.image.load('hero.png')
-hero_rect = hero_image.get_rect(center=(player_pos.x,player_pos.y))
-actual_room = 1
 font = pygame.font.Font(None, 36)
 
 #malosos
@@ -77,13 +75,15 @@ aliens_2 = [
 ]
 aliens_1 = []
 aliens_3 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
-
+aliens_4 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
+aliens_5 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
 #pieces
 part_one = pygame.image.load('ship_part_1.png')
 pieces_3 =  [part_one.get_rect(topleft=(128,128))]
 pieces_1 = [part_one.get_rect(topleft=(128,128))]
 pieces_2 = []
-
+pieces_4 =  [part_one.get_rect(topleft=(128,128))]
+pieces_5 =  [part_one.get_rect(topleft=(128,128))]
 #paredes
 brick_image = pygame.image.load('brick.png')
 room_1 = [
@@ -282,31 +282,243 @@ room_3 = [
     brick_image.get_rect(topleft=(1216, 512)),
 ]
 
+room_4 = [
+    brick_image.get_rect(topleft=(400, 300)),
+    brick_image.get_rect(topleft=(400, 364)),
+    brick_image.get_rect(topleft=(800, 300)),
+    brick_image.get_rect(topleft=(800, 364)),
 
+    brick_image.get_rect(topleft=(0, 64)),
+    brick_image.get_rect(topleft=(64, 64)),
+    brick_image.get_rect(topleft=(128, 64)),
+    brick_image.get_rect(topleft=(192, 64)),
+    brick_image.get_rect(topleft=(256, 64)),
+    brick_image.get_rect(topleft=(320, 64)),
+    brick_image.get_rect(topleft=(384, 64)),
+    brick_image.get_rect(topleft=(448, 64)),
+    #brick_image.get_rect(topleft=(512, 64)),
+    #brick_image.get_rect(topleft=(576, 64)),
+    brick_image.get_rect(topleft=(640, 64)),
+    brick_image.get_rect(topleft=(704, 64)),
+    brick_image.get_rect(topleft=(768, 64)),
+    brick_image.get_rect(topleft=(832, 64)),
+    brick_image.get_rect(topleft=(896, 64)),
+    brick_image.get_rect(topleft=(960, 64)),
+    brick_image.get_rect(topleft=(1024, 64)),
+    brick_image.get_rect(topleft=(1088, 64)),
+    brick_image.get_rect(topleft=(1152, 64)),
+    brick_image.get_rect(topleft=(1216, 64)),
+    brick_image.get_rect(topleft=(0, 656)),
+    brick_image.get_rect(topleft=(64, 656)),
+    brick_image.get_rect(topleft=(128, 656)),
+    brick_image.get_rect(topleft=(192, 656)),
+    brick_image.get_rect(topleft=(256, 656)),
+    brick_image.get_rect(topleft=(320, 656)),
+    brick_image.get_rect(topleft=(384, 656)),
+    brick_image.get_rect(topleft=(448, 656)),
+    brick_image.get_rect(topleft=(512, 656)),
+    brick_image.get_rect(topleft=(576, 656)),
+    brick_image.get_rect(topleft=(640, 656)),
+    brick_image.get_rect(topleft=(704, 656)),
+    brick_image.get_rect(topleft=(768, 656)),
+    brick_image.get_rect(topleft=(832, 656)),
+    brick_image.get_rect(topleft=(896, 656)),
+    brick_image.get_rect(topleft=(960, 656)),
+    brick_image.get_rect(topleft=(1024, 656)),
+    brick_image.get_rect(topleft=(1088, 656)),
+    brick_image.get_rect(topleft=(1152, 656)),
+    brick_image.get_rect(topleft=(1216, 656)),
+
+    brick_image.get_rect(topleft=(0, 128)),
+    brick_image.get_rect(topleft=(0, 192)),
+    brick_image.get_rect(topleft=(0, 256)),
+    brick_image.get_rect(topleft=(0, 320)),
+    brick_image.get_rect(topleft=(0, 384)),
+    brick_image.get_rect(topleft=(0, 448)),
+    brick_image.get_rect(topleft=(0, 512)),
+
+    brick_image.get_rect(topleft=(1216, 128)),
+    brick_image.get_rect(topleft=(1216, 192)),
+    brick_image.get_rect(topleft=(1216, 256)),
+    #brick_image.get_rect(topleft=(1216, 320)),
+    #brick_image.get_rect(topleft=(1216, 384)),
+    brick_image.get_rect(topleft=(1216, 448)),
+    brick_image.get_rect(topleft=(1216, 512)),
+    brick_image.get_rect(topleft=(1216, 576)),
+    brick_image.get_rect(topleft=(1216, 640)),
+]
+room_5 = [
+    brick_image.get_rect(topleft=(400, 300)),
+    brick_image.get_rect(topleft=(400, 364)),
+    brick_image.get_rect(topleft=(800, 300)),
+    brick_image.get_rect(topleft=(800, 364)),
+
+    brick_image.get_rect(topleft=(0, 64)),
+    brick_image.get_rect(topleft=(64, 64)),
+    brick_image.get_rect(topleft=(128, 64)),
+    brick_image.get_rect(topleft=(192, 64)),
+    brick_image.get_rect(topleft=(256, 64)),
+    brick_image.get_rect(topleft=(320, 64)),
+    brick_image.get_rect(topleft=(384, 64)),
+    brick_image.get_rect(topleft=(448, 64)),
+    brick_image.get_rect(topleft=(512, 64)),
+    brick_image.get_rect(topleft=(576, 64)),
+    brick_image.get_rect(topleft=(640, 64)),
+    brick_image.get_rect(topleft=(704, 64)),
+    brick_image.get_rect(topleft=(768, 64)),
+    brick_image.get_rect(topleft=(832, 64)),
+    brick_image.get_rect(topleft=(896, 64)),
+    brick_image.get_rect(topleft=(960, 64)),
+    brick_image.get_rect(topleft=(1024, 64)),
+    brick_image.get_rect(topleft=(1088, 64)),
+    brick_image.get_rect(topleft=(1152, 64)),
+    brick_image.get_rect(topleft=(1216, 64)),
+    brick_image.get_rect(topleft=(0, 656)),
+    brick_image.get_rect(topleft=(64, 656)),
+    brick_image.get_rect(topleft=(128, 656)),
+    brick_image.get_rect(topleft=(192, 656)),
+    brick_image.get_rect(topleft=(256, 656)),
+    brick_image.get_rect(topleft=(320, 656)),
+    brick_image.get_rect(topleft=(384, 656)),
+    brick_image.get_rect(topleft=(448, 656)),
+    brick_image.get_rect(topleft=(512, 656)),
+    brick_image.get_rect(topleft=(576, 656)),
+    brick_image.get_rect(topleft=(640, 656)),
+    brick_image.get_rect(topleft=(704, 656)),
+    brick_image.get_rect(topleft=(768, 656)),
+    brick_image.get_rect(topleft=(832, 656)),
+    brick_image.get_rect(topleft=(896, 656)),
+    brick_image.get_rect(topleft=(960, 656)),
+    brick_image.get_rect(topleft=(1024, 656)),
+    brick_image.get_rect(topleft=(1088, 656)),
+    brick_image.get_rect(topleft=(1152, 656)),
+    brick_image.get_rect(topleft=(1216, 656)),
+
+    brick_image.get_rect(topleft=(0, 128)),
+    brick_image.get_rect(topleft=(0, 192)),
+    brick_image.get_rect(topleft=(0, 256)),
+    brick_image.get_rect(topleft=(0, 320)),
+    brick_image.get_rect(topleft=(0, 384)),
+    brick_image.get_rect(topleft=(0, 448)),
+    brick_image.get_rect(topleft=(0, 512)),
+    brick_image.get_rect(topleft=(0, 576)),
+    brick_image.get_rect(topleft=(0, 640)),
+    brick_image.get_rect(topleft=(1216, 128)),
+    brick_image.get_rect(topleft=(1216, 192)),
+    brick_image.get_rect(topleft=(1216, 256)),
+    brick_image.get_rect(topleft=(1216, 320)),
+    brick_image.get_rect(topleft=(1216, 384)),
+    brick_image.get_rect(topleft=(1216, 448)),
+    brick_image.get_rect(topleft=(1216, 512)),
+    #brick_image.get_rect(topleft=(1216, 576)),
+    #brick_image.get_rect(topleft=(1216, 640)),
+]
+
+room_6 = [
+    brick_image.get_rect(topleft=(400, 300)),
+    brick_image.get_rect(topleft=(400, 364)),
+    brick_image.get_rect(topleft=(800, 300)),
+    brick_image.get_rect(topleft=(800, 364)),
+
+    brick_image.get_rect(topleft=(0, 64)),
+    brick_image.get_rect(topleft=(64, 64)),
+    brick_image.get_rect(topleft=(128, 64)),
+    brick_image.get_rect(topleft=(192, 64)),
+    brick_image.get_rect(topleft=(256, 64)),
+    brick_image.get_rect(topleft=(320, 64)),
+    brick_image.get_rect(topleft=(384, 64)),
+    brick_image.get_rect(topleft=(448, 64)),
+    brick_image.get_rect(topleft=(512, 64)),
+    brick_image.get_rect(topleft=(576, 64)),
+    brick_image.get_rect(topleft=(640, 64)),
+    brick_image.get_rect(topleft=(704, 64)),
+    brick_image.get_rect(topleft=(768, 64)),
+    brick_image.get_rect(topleft=(832, 64)),
+    brick_image.get_rect(topleft=(896, 64)),
+    brick_image.get_rect(topleft=(960, 64)),
+    brick_image.get_rect(topleft=(1024, 64)),
+    brick_image.get_rect(topleft=(1088, 64)),
+    brick_image.get_rect(topleft=(1152, 64)),
+    brick_image.get_rect(topleft=(1216, 64)),
+    brick_image.get_rect(topleft=(0, 656)),
+    brick_image.get_rect(topleft=(64, 656)),
+    brick_image.get_rect(topleft=(128, 656)),
+    brick_image.get_rect(topleft=(192, 656)),
+    brick_image.get_rect(topleft=(256, 656)),
+    brick_image.get_rect(topleft=(320, 656)),
+    brick_image.get_rect(topleft=(384, 656)),
+    brick_image.get_rect(topleft=(448, 656)),
+    brick_image.get_rect(topleft=(512, 656)),
+    brick_image.get_rect(topleft=(576, 656)),
+    brick_image.get_rect(topleft=(640, 656)),
+    brick_image.get_rect(topleft=(704, 656)),
+    brick_image.get_rect(topleft=(768, 656)),
+    brick_image.get_rect(topleft=(832, 656)),
+    brick_image.get_rect(topleft=(896, 656)),
+    brick_image.get_rect(topleft=(960, 656)),
+    brick_image.get_rect(topleft=(1024, 656)),
+    brick_image.get_rect(topleft=(1088, 656)),
+    brick_image.get_rect(topleft=(1152, 656)),
+    brick_image.get_rect(topleft=(1216, 656)),
+
+    brick_image.get_rect(topleft=(0, 128)),
+    brick_image.get_rect(topleft=(0, 192)),
+    brick_image.get_rect(topleft=(0, 256)),
+    brick_image.get_rect(topleft=(0, 320)),
+    brick_image.get_rect(topleft=(0, 384)),
+    brick_image.get_rect(topleft=(0, 448)),
+    brick_image.get_rect(topleft=(0, 512)),
+    brick_image.get_rect(topleft=(0, 576)),
+    brick_image.get_rect(topleft=(0, 640)),
+    brick_image.get_rect(topleft=(1216, 128)),
+    brick_image.get_rect(topleft=(1216, 192)),
+    brick_image.get_rect(topleft=(1216, 256)),
+    brick_image.get_rect(topleft=(1216, 320)),
+    brick_image.get_rect(topleft=(1216, 384)),
+    brick_image.get_rect(topleft=(1216, 448)),
+    brick_image.get_rect(topleft=(1216, 512)),
+    #brick_image.get_rect(topleft=(1216, 576)),
+    #brick_image.get_rect(topleft=(1216, 640)),
+]
 rooms = {
     1: room_1,
     2: room_2,
     3: room_3,
+    4: room_4,
+    5: room_5
 }
 
 aliens = {
     1: aliens_1,
     2: aliens_2,
-    3: aliens_3
+    3: aliens_3,
+    4: aliens_4,
+    5: aliens_5
 }
 
 pieces = {
     1: pieces_1,
     2: pieces_2,
-    3: pieces_3
+    3: pieces_3,
+    4: pieces_4,
+    5: pieces_5
 }
 
+initial_pieces = copy.deepcopy(pieces)
+player_pos, actual_room, pieces, items = restart_game(initial_pieces)
 portals = {
     1: [{'position':pygame.Rect(1216,320,64,128), 'destination': 2, 'spawn_pos': (65,576)},
         {'position':pygame.Rect(0,576,64,128), 'destination': 3, 'spawn_pos': (1140,576)}],
     2: [{'position':pygame.Rect(0,576,64,128), 'destination': 1,'spawn_pos': (1140,320)}],
-    3: [{'position': pygame.Rect(1216,576,64,128), 'destination': 1,'spawn_pos': (65,576)}]
+    3: [{'position': pygame.Rect(1216,576,64,128), 'destination': 1,'spawn_pos': (65,576)},
+        {'position': pygame.Rect(512,656,64,64), 'destination': 4,'spawn_pos': (512,129)}],
+    4: [{'position': pygame.Rect(512,64,64,64), 'destination': 3,'spawn_pos': (512,592)},
+        {'position': pygame.Rect(0,576,64,128), 'destination': 5,'spawn_pos': (1140,576)}],
+    5: [{'position': pygame.Rect(1216,576,64,128), 'destination': 4,'spawn_pos': (65,576)}]
 }
+
+hero_image = pygame.image.load('hero.png')
+hero_rect = hero_image.get_rect(center=(player_pos.x,player_pos.y))
 
 #initialize aliens
 
@@ -375,7 +587,7 @@ while running:
     for alien in aliens[actual_room]:
         if hero_rect.colliderect(alien.rect):
             game_over()
-            restart_game()
+            player_pos, actual_room, pieces, items = restart_game(initial_pieces)
 
     pygame.display.flip()
     dt = clock.tick(60) /1000 
