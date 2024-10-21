@@ -27,9 +27,7 @@ def game_over():
         pygame.display.flip()
 
 def restart_game(initial_pieces):
-    #global player_pos, hero_rect, actual_room
     player_pos = pygame.Vector2(screen.get_width() /2, screen.get_height() /2)
-    #hero_rect.topleft = (int(player_pos.x), int(player_pos.y))
     pieces = copy.deepcopy(initial_pieces)
     items = 0
     actual_room = 1
@@ -71,20 +69,22 @@ red_alien_image = pygame.image.load('red_alien.png')
 yellow_alien_image = pygame.image.load('yellow_alien.png')
 
 aliens_2 = [
-    Alien(300,192), Yellow_Alien(200, 256)
+    Alien(256,512), Yellow_Alien(256, 384), Alien(960,128),Yellow_Alien(640, 576)
 ]
 aliens_1 = []
 aliens_3 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
-aliens_4 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
+aliens_4 =[Alien(600,320), Yellow_Alien(256, 324),Alien(300,512), Yellow_Alien(448, 512),Yellow_Alien(900, 256)]
 aliens_5 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
+aliens_6 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
 #pieces
 part_one = pygame.image.load('ship_part_1.png')
-pieces_3 =  [part_one.get_rect(topleft=(128,128))]
-pieces_1 = [part_one.get_rect(topleft=(128,128))]
-pieces_2 = []
-pieces_4 =  [part_one.get_rect(topleft=(128,128))]
-pieces_5 =  [part_one.get_rect(topleft=(128,128))]
-#paredes
+pieces_3 = [part_one.get_rect(topleft=(128,128))]
+pieces_1 = []
+pieces_2 = [part_one.get_rect(topleft=(512,256))]
+pieces_4 = [part_one.get_rect(topleft=(576,576))]
+pieces_5 = [part_one.get_rect(topleft=(128,128))]
+pieces_6 = [part_one.get_rect(topleft=(128,128))]
+#walls
 brick_image = pygame.image.load('brick.png')
 room_1 = [
     brick_image.get_rect(topleft=(400, 300)),
@@ -153,10 +153,18 @@ room_1 = [
 ]
 
 room_2 = [
-    brick_image.get_rect(topleft=(200, 300)),
-    brick_image.get_rect(topleft=(200, 364)),
-    brick_image.get_rect(topleft=(500, 300)),
-    brick_image.get_rect(topleft=(500, 364)),
+    brick_image.get_rect(topleft=(256, 192)),
+    brick_image.get_rect(topleft=(256, 256)),
+    brick_image.get_rect(topleft=(320, 192)),
+    brick_image.get_rect(topleft=(320, 256)),
+    brick_image.get_rect(topleft=(384, 320)),
+    brick_image.get_rect(topleft=(448, 384)),
+    brick_image.get_rect(topleft=(576, 384)),
+    brick_image.get_rect(topleft=(640, 320)),
+    brick_image.get_rect(topleft=(704, 192)),
+    brick_image.get_rect(topleft=(704, 256)),
+    brick_image.get_rect(topleft=(768, 192)),
+    brick_image.get_rect(topleft=(768, 256)),
 
     brick_image.get_rect(topleft=(0, 64)),
     brick_image.get_rect(topleft=(64, 64)),
@@ -485,7 +493,8 @@ rooms = {
     2: room_2,
     3: room_3,
     4: room_4,
-    5: room_5
+    5: room_5,
+    6: room_6
 }
 
 aliens = {
@@ -493,7 +502,8 @@ aliens = {
     2: aliens_2,
     3: aliens_3,
     4: aliens_4,
-    5: aliens_5
+    5: aliens_5,
+    6: aliens_6
 }
 
 pieces = {
@@ -501,7 +511,8 @@ pieces = {
     2: pieces_2,
     3: pieces_3,
     4: pieces_4,
-    5: pieces_5
+    5: pieces_5,
+    6: pieces_6
 }
 
 initial_pieces = copy.deepcopy(pieces)
@@ -509,12 +520,14 @@ player_pos, actual_room, pieces, items = restart_game(initial_pieces)
 portals = {
     1: [{'position':pygame.Rect(1216,320,64,128), 'destination': 2, 'spawn_pos': (65,576)},
         {'position':pygame.Rect(0,576,64,128), 'destination': 3, 'spawn_pos': (1140,576)}],
-    2: [{'position':pygame.Rect(0,576,64,128), 'destination': 1,'spawn_pos': (1140,320)}],
+    2: [{'position':pygame.Rect(0,576,64,128), 'destination': 1,'spawn_pos': (1140,320)},
+        {'position': pygame.Rect(1216,320,64,128), 'destination': 6,'spawn_pos': (65,321)}],
     3: [{'position': pygame.Rect(1216,576,64,128), 'destination': 1,'spawn_pos': (65,576)},
         {'position': pygame.Rect(512,656,64,64), 'destination': 4,'spawn_pos': (512,129)}],
     4: [{'position': pygame.Rect(512,64,64,64), 'destination': 3,'spawn_pos': (512,592)},
         {'position': pygame.Rect(0,576,64,128), 'destination': 5,'spawn_pos': (1140,576)}],
-    5: [{'position': pygame.Rect(1216,576,64,128), 'destination': 4,'spawn_pos': (65,576)}]
+    5: [{'position': pygame.Rect(1216,576,64,128), 'destination': 4,'spawn_pos': (65,576)}],
+    6: [{'position': pygame.Rect(0,320,64,128), 'destination': 2,'spawn_pos': (1140,320)}]
 }
 
 hero_image = pygame.image.load('hero.png')
