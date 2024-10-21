@@ -15,13 +15,13 @@ def game_over():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+                return "quit"
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
-                    return
+                    return "restart"
                 elif event.key == pygame.K_q:
                     pygame.quit()
-                    return
+                    return "quit"
         screen.fill("black")
         screen.blit(font.render("GAME OVER (R-restart/Q-quit)", True, (255,255,255)), (screen.get_width() // 2 - 200, screen.get_height() //2))
         pygame.display.flip()
@@ -57,6 +57,27 @@ class Yellow_Alien:
                 self.direction *= -1
                 break
 
+class Worm:
+    def __init__(self, x, y):
+        self.rect = worm_alien_image.get_rect(topleft=(x, y))
+        self.directions = [(0, -1), (1, 0), (0, 1), (-1, 0)]  # Arriba, derecha, abajo, izquierda
+        self.current_direction = 0
+        self.move_speed = 100  # Velocidad de movimiento
+        self.direction_change_timer = 0  # Temporizador para cambiar dirección
+        self.direction_change_interval = 1  # Cambiar dirección cada segundo
+
+    def move(self, dt, room):
+        # Mover en la dirección actual
+        self.rect.x += self.directions[self.current_direction][0] * self.move_speed * dt
+        self.rect.y += self.directions[self.current_direction][1] * self.move_speed * dt
+
+        # Actualizar el temporizador
+        self.direction_change_timer += dt
+        if self.direction_change_timer >= self.direction_change_interval:
+            self.direction_change_timer = 0  # Reiniciar temporizador
+            self.current_direction = (self.current_direction + 1) % 4  # Cambiar dirección
+
+
 pygame.init()
 screen = pygame.display.set_mode((1280,720))
 clock = pygame.time.Clock()
@@ -67,13 +88,14 @@ font = pygame.font.Font(None, 36)
 #malosos
 red_alien_image = pygame.image.load('red_alien.png')
 yellow_alien_image = pygame.image.load('yellow_alien.png')
+worm_alien_image = pygame.image.load('worm.png')
 
 aliens_2 = [
     Alien(256,512), Yellow_Alien(256, 384), Alien(960,128),Yellow_Alien(640, 576)
 ]
 aliens_1 = []
 aliens_3 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
-aliens_4 =[Alien(600,320), Yellow_Alien(256, 324),Alien(300,512), Yellow_Alien(448, 512),Yellow_Alien(900, 256)]
+aliens_4 =[Alien(600,320), Yellow_Alien(256, 324),Alien(300,512), Yellow_Alien(448, 512),Yellow_Alien(900, 256), Worm(192,256)]
 aliens_5 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
 aliens_6 =[Alien(600,320), Yellow_Alien(300, 256),Alien(300,512), Yellow_Alien(500, 256),Yellow_Alien(900, 256)]
 #pieces
@@ -229,7 +251,9 @@ room_3 = [
     brick_image.get_rect(topleft=(200, 364)),
     brick_image.get_rect(topleft=(500, 300)),
     brick_image.get_rect(topleft=(500, 364)),
-
+    brick_image.get_rect(topleft=(1152,512)),
+    brick_image.get_rect(topleft=(64,512)),
+    brick_image.get_rect(topleft=(128,512)),
     brick_image.get_rect(topleft=(0, 64)),
     brick_image.get_rect(topleft=(64, 64)),
     brick_image.get_rect(topleft=(128, 64)),
@@ -577,11 +601,13 @@ while running:
     screen.blit(text_surface, (10,10))
     screen.blit(hero_image, hero_rect.topleft)
     if actual_room != 1:
+        alien_images = {
+            Alien: red_alien_image,
+            Yellow_Alien: yellow_alien_image,
+            Worm: worm_alien_image
+        }
         for alien in aliens[actual_room]:
-            if isinstance(alien, Alien):
-                screen.blit(red_alien_image,alien.rect.topleft)
-            else:
-                screen.blit(yellow_alien_image,alien.rect.topleft)
+            screen.blit(alien_images.get(type(alien)),alien.rect.topleft)
     for brick_rect in rooms[actual_room]:
         screen.blit(brick_image, brick_rect)
     
@@ -599,10 +625,15 @@ while running:
     #aliens collition
     for alien in aliens[actual_room]:
         if hero_rect.colliderect(alien.rect):
-            game_over()
-            player_pos, actual_room, pieces, items = restart_game(initial_pieces)
+            resultado = game_over()
+            if resultado == "restart":
+                player_pos, actual_room, pieces, items = restart_game(initial_pieces)
+            elif resultado == "quit":
+                runnint = False
+            
 
     pygame.display.flip()
     dt = clock.tick(60) /1000 
 
 pygame.quit()
+print('Thank you for playing this demo!')
