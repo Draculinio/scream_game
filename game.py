@@ -14,22 +14,21 @@ def game_over():
     while game_over_running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
                 return "quit"
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     return "restart"
                 elif event.key == pygame.K_q:
-                    pygame.quit()
-                    return "quit"
+                    game_over_running = False
         screen.fill("black")
         screen.blit(font.render("GAME OVER (R-restart/Q-quit)", True, (255,255,255)), (screen.get_width() // 2 - 200, screen.get_height() //2))
         pygame.display.flip()
+    return "quit"
 
 def restart_game(initial_pieces):
     player_pos = pygame.Vector2(screen.get_width() /2, screen.get_height() /2)
     pieces = copy.deepcopy(initial_pieces)
-    items = 0
+    items = 0 #put 11 to finish the game
     actual_room = 1
     return player_pos, actual_room, pieces, items
 
@@ -40,13 +39,103 @@ def check_win_condition(player_rect, ship_rect, collected_pieces, total_pieces):
     return False
 
 
+def animate_ship_flying():
+    ship_image = pygame.image.load('ship.png')
+    ship_y = screen.get_height() - ship_image.get_height()
+    ship_x = screen.get_width() // 2 - ship_image.get_width()
+    
+    while ship_y + ship_image.get_height() > 0:
+        screen.fill("black")
+        screen.blit(ship_image, (ship_x, ship_y))
+        
+        pygame.display.flip()
+        pygame.time.delay(30)
+        
+        ship_y -= 5
+    pygame.time.delay(1000)
+
+def show_presentation():
+    screen.fill("black")
+    
+    # M1
+    message_1 = font.render("Year 2056", True, (255, 255, 255))
+    message_1_rect = message_1.get_rect(center=(screen.get_width() // 2, screen.get_height() // 3))
+    
+    # M2
+    message_2 = font.render("The greatest astronaut ever, Robert Python, goes on a mission...", True, (255, 255, 255))
+    message_2_rect = message_2.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+    
+    # M3
+    message_3 = font.render("Be the first person on Mars.", True, (255, 255, 255))
+    message_3_rect = message_3.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + 40))
+    
+    screen.blit(message_1, message_1_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(1500)
+    
+    screen.blit(message_2, message_2_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(1500)
+    
+    screen.blit(message_3, message_3_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(2000)
+    animate_ship_flying()
+    
+    message_4 = font.render("But something went wrong...", True, (255, 255, 255))
+    message_4_rect = message_1.get_rect(center=(screen.get_width() // 2, screen.get_height() // 3))
+    message_5 = font.render("a misterious black hole suddenly appeared", True, (255, 255, 255))
+    message_5_rect = message_5.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+    message_6 = font.render("and the ship crashed into the misterious and dangerous planet Limbus", True, (255, 255, 255))
+    message_6_rect = message_6.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + 40))
+    message_7 = font.render("your mission is to get all the parts of your ship and return to Earth", True, (255, 255, 255))
+    message_7_rect = message_7.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + 80))
+    
+    screen.blit(message_4, message_4_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(1500)
+    screen.blit(message_5, message_5_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(1500)
+    screen.blit(message_6, message_6_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(1500)
+    screen.blit(message_7, message_7_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(1500)
+    large_font = pygame.font.Font(None, 72)  # 'None' uses the default system font
+    title_text = large_font.render("ROBERT PYTHON IN PLANET LIMBUS", True, (255, 255, 255))  # White text
+    title_rect = title_text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 4))
+    screen.fill("red")
+    screen.blit(title_text, title_rect.topleft)
+    company = font.render("Cochecito Software", True, (255, 255, 255))
+    social_media = font.render("X: @CochecitoSoft // Youtube: @PythonIsGod", True, (255, 255, 255))
+    lower_left_rect = company.get_rect(bottomleft=(10, screen.get_height() - 10))  # 10 píxeles de margen
+    screen.blit(company, lower_left_rect.topleft)
+    lower_right_rect = social_media.get_rect(bottomright=(screen.get_width() - 10, screen.get_height() - 10))
+    screen.blit(social_media, lower_right_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(3000)
+
 def show_victory_screen():
     screen.fill("black")
     victory_message = font.render("Robert Python repaired his ship, now he can return to our planet", True, (255, 255, 255))
-    screen.blit(victory_message, (screen.get_width() // 2 - 100, screen.get_height() // 2))
+    message_rect = victory_message.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2))
+    screen.blit(victory_message, message_rect.topleft)
     pygame.display.flip()
-    pygame.time.delay(2000)  
-
+    pygame.time.delay(2000)
+    game_over = font.render("Game Over", True, (255, 255, 255))
+    go_rect = game_over.get_rect(center=(screen.get_width() // 2, message_rect.bottom + 30))
+    company = font.render("Cochecito Software", True, (255, 255, 255))
+    social_media = font.render("X: @CochecitoSoft // Youtube: @PythonIsGod", True, (255, 255, 255))
+    lower_left_rect = company.get_rect(bottomleft=(10, screen.get_height() - 10))  # 10 píxeles de margen
+    screen.blit(company, lower_left_rect.topleft)
+    lower_right_rect = social_media.get_rect(bottomright=(screen.get_width() - 10, screen.get_height() - 10))
+    screen.blit(social_media, lower_right_rect.topleft)
+    screen.blit(game_over, go_rect.topleft)
+    pygame.display.flip()
+    pygame.time.delay(2000)
+    
 class Alien:
     def __init__(self,x,y):
         self.rect = red_alien_image.get_rect(topleft=(x,y))
@@ -93,6 +182,12 @@ class Worm:
 
 
 pygame.init()
+hero_image = pygame.image.load('hero.png')
+hero_image = pygame.transform.scale(hero_image, (60,60))
+ship_image = pygame.image.load('ship.png')
+ship_rect = ship_image.get_rect(topleft=(192,192))
+pygame.display.set_caption("Robert Python in Planet Limbus")
+pygame.display.set_icon(hero_image)
 screen = pygame.display.set_mode((1280,720))
 clock = pygame.time.Clock()
 running = True
@@ -989,13 +1084,9 @@ portals = {
         {'position': pygame.Rect(704,0,64,64), 'destination': 6,'spawn_pos': (704,592)}]
 
 }
-
-hero_image = pygame.image.load('hero.png')
-hero_image = pygame.transform.scale(hero_image, (60,60))
 hero_rect = hero_image.get_rect(center=(player_pos.x,player_pos.y))
-ship_image = pygame.image.load('ship.png')
-ship_rect = ship_image.get_rect(topleft=(192,192))
 #initialize aliens
+show_presentation()
 
 while running:
     for event in pygame.event.get():
@@ -1069,7 +1160,7 @@ while running:
             if resultado == "restart":
                 player_pos, actual_room, pieces, items = restart_game(initial_pieces)
             elif resultado == "quit":
-                runnint = False
+                running = False
             
     if check_win_condition(hero_rect, ship_rect, items, 11):
         show_victory_screen()
