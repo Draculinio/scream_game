@@ -209,7 +209,7 @@ aliens_7 =[Yellow_Alien(300, 256),Yellow_Alien(768,320), Yellow_Alien(500, 256),
 aliens_8 = [Worm(320,512),Worm(320,384),Worm(768,512),Worm(768,384),Worm(832,320),Worm(256,320)]
 aliens_9 = [Yellow_Alien(384, 512),Yellow_Alien(320, 448),Alien(128,448)]
 aliens_10 = [Yellow_Alien(320, 448),Alien(128,256),Alien(896,448),Yellow_Alien(576, 196)]
-aliens_11 = [Yellow_Alien(320, 448),Alien(128,256),Alien(896,448),Alien(768, 576),Yellow_Alien(256, 448)]
+aliens_11 = [Yellow_Alien(320, 448),Alien(128,256),Alien(896,448),Alien(768, 448),Yellow_Alien(256, 448)]
 #pieces
 part_one = pygame.image.load('ship_part_1.png')
 pieces_3 = [part_one.get_rect(topleft=(128,128))]
@@ -1003,7 +1003,7 @@ room_11 = [
     brick_image.get_rect(topleft=(0, 384)),
     brick_image.get_rect(topleft=(0, 448)),
     brick_image.get_rect(topleft=(0, 512)),
-
+    brick_image.get_rect(topleft=(0, 576)),
     brick_image.get_rect(topleft=(1216, 128)),
     brick_image.get_rect(topleft=(1216, 192)),
     brick_image.get_rect(topleft=(1216, 256)),
@@ -1075,8 +1075,10 @@ portals = {
     7: [{'position': pygame.Rect(0,320,64,128), 'destination': 4,'spawn_pos': (1140,320)},
         {'position': pygame.Rect(1216,128,64,128), 'destination': 8,'spawn_pos': (65,192)}],
     8: [{'position': pygame.Rect(0,128,64,128), 'destination': 7,'spawn_pos': (1140,192)},
-        {'position': pygame.Rect(832,656,64,64), 'destination': 9,'spawn_pos': (832,129)}],
+        {'position': pygame.Rect(832,656,64,64), 'destination': 9,'spawn_pos': (832,129)},
+        {'position': pygame.Rect(896,656,64,64), 'destination': 9,'spawn_pos': (896,129)}],
     9: [{'position': pygame.Rect(832,0,64,64), 'destination': 8,'spawn_pos': (832,592)},
+        {'position': pygame.Rect(896,0,64,64), 'destination': 8,'spawn_pos': (896,592)},
         {'position': pygame.Rect(1216,320,64,128), 'destination': 10,'spawn_pos': (65,320)}],
     10: [{'position': pygame.Rect(0,320,64,128), 'destination': 9,'spawn_pos': (1140,320)},
         {'position': pygame.Rect(448,0,64,64), 'destination': 11,'spawn_pos': (448,592)}],
